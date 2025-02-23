@@ -1,47 +1,15 @@
+import sys
+
+from stats import get_book_text, get_num_words, get_chars_dict, print_report
+
 def main():
-    book_path = "books/frankenstein.txt"
+    if len(sys.argv) != 2:
+        print("Usage: python3 main.py <path_to_book>")
+        sys.exit(1)
+    book_path = sys.argv[1]
     text = get_book_text(book_path)
     num_words = get_num_words(text)
     chars_dict = get_chars_dict(text)
     print_report(book_path, num_words, chars_dict)
-
-def get_book_text(path):
-    with open(path) as f:
-        return f.read()
-
-def get_num_words(file):
-    return len(file.split())
-
-def get_chars_dict(file):
-    characters = {}
-    for ch in file.lower():
-        if ch in characters:
-            characters[ch] += 1
-        else:
-            characters[ch] = 1
-    return characters
-
-def to_list(dict):
-    result = []
-    for key in dict:
-        result.append({"letter": key, "value": dict[key]})
-    return result
-
-def sort_on(dict):
-    return dict["value"]
-
-def print_report(book_path, num_words, chars_dict):
-    list_chars = to_list(chars_dict)
-    list_chars.sort(reverse=True, key=sort_on)
-
-    print(f"--- Begin report of {book_path} ---")
-    print(f"{num_words} words found in the document")
-    print()
-    
-    for ch in list_chars:
-        letter, value = ch["letter"], ch["value"]
-        if letter.isalpha():
-            print(f"The '{letter}' character was found {value} times")
-    print("--- End report ---")
 
 main()
